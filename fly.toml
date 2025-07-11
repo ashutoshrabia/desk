@@ -1,0 +1,12 @@
+app = "news-similarity-api"
+
+[build]
+  image = "ghcr.io/ashutoshrabia/desk:latest"
+
+[env]
+
+[http_service]
+  internal_port = 7860
+
+  [http_service.resources]
+    memory_mb = 512
