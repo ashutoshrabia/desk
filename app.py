@@ -1,4 +1,4 @@
-# app.py
+
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -38,7 +38,6 @@ class SearchQuery(BaseModel):
 INDEX_PATH = "news.index"
 META_PATH = "meta.json"
 
-<<<<<<< HEAD
 try:
     INDEX = faiss.read_index(INDEX_PATH)
     logger.info(f"Loaded FAISS index from {INDEX_PATH}")
@@ -58,46 +57,9 @@ except Exception as e:
 # SentenceTransformer for queries only
 MODEL = SentenceTransformer("all-MiniLM-L6-v2")
 logger.info("SentenceTransformer model initialized for query embeddings.")
-=======
-    def load_csv(self):
-        logger.info(f"Loading CSV from: {self.csv_path}")
-        if not os.path.exists(self.csv_path):
-            raise FileNotFoundError(f"CSV not found at {self.csv_path}")
-        df = pd.read_csv(self.csv_path, encoding='latin1')
-        for col in ['Article', 'Date', 'Heading', 'NewsType']:
-            if col not in df.columns:
-                raise ValueError(f"Missing column: {col}")
-        articles = df['Article'].astype(str).tolist()
-        self.model = SentenceTransformer('all-MiniLM-L6-v2')
-        embeddings = self.model.encode(articles, show_progress_bar=True)
-        self.index = faiss.IndexFlatL2(self.dimension)
-        self.index.add(np.array(embeddings))
-        for idx, row in df.iterrows():
-            self.documents.append({
-                'id': idx,
-                'article': row['Article'],
-                'date': row['Date'],
-                'heading': row['Heading'],
-                'news_type': row['NewsType']
-            })
-        logger.info(f"Indexed {len(self.documents)} articles")
-
-    def search(self, query: str, top_k: int = 5) -> List[Dict]:
-        embed = self.model.encode([query])[0]
-        dists, idxs = self.index.search(np.array([embed]), top_k)
-        results = []
-        for dist, idx in zip(dists[0], idxs[0]):
-            if idx < 0 or idx >= len(self.documents):
-                continue
-            doc = self.documents[idx]
-            sim = 1 - (dist / 2)
-            results.append({**doc, 'similarity': float(sim)})
-        return results
->>>>>>> 0943f9e87d1a11ae58991fa9f4de3256b32a8edb
 
 
 def get_head(title: str) -> str:
-<<<<<<< HEAD
     """
     Generate the HTML <head> section, injecting the page title.
     """
@@ -121,31 +83,6 @@ def get_head(title: str) -> str:
   <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js\"></script>
 </head>
 """
-=======
-    """
-    Generates the HTML <head> section with CSS and JS links.
-    """
-    template = """
-    <head>
-      <meta charset=\"utf-8\">
-      <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-      <title>{title}</title>
-      <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css\" rel=\"stylesheet\">
-      <style>
-        html, body { height: 100%; margin: 0; }
-        body { background: #e9ecef; }
-        .hero { position: relative; width: 100%; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #343a40; }
-        .hero img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.3; z-index: 0; }
-        .hero .content { position: relative; z-index: 1; color: #fff; text-align: center; }
-        .hero h1 { font-weight: 800; font-size: 4rem; }
-        .hero p { font-size: 1.5rem; }
-        .form-range { width: 150px; }
-        .accordion-button { font-weight: bold; }
-      </style>
-      <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js\"></script>
-    </head>
-    """
->>>>>>> 0943f9e87d1a11ae58991fa9f4de3256b32a8edb
     return template.format(title=title)
 
 
@@ -175,7 +112,6 @@ async def search_form(request: Request, query: str = "", top_k: int = 5):
     # Empty form
     if not query:
         return f"""
-<<<<<<< HEAD
 <html>{head}
 <body>
   <div class=\"container py-5\">
@@ -229,17 +165,6 @@ async def search_form(request: Request, query: str = "", top_k: int = 5):
 </html>
 """
 
-=======
-        <html>{head}<body>
-          <div class=\"container py-5\">... (form HTML unchanged) ...
-        </body></html>
-        """
-    results = doc_store.search(query, top_k)
-    items = "\n".join([...])  # build accordion items as before
-    return f"""
-    <html>{head}<body>... (results HTML unchanged) ...</body></html>
-    """
->>>>>>> 0943f9e87d1a11ae58991fa9f4de3256b32a8edb
 
 @app.post("/api/search")
 async def api_search_post(query: SearchQuery):
@@ -266,10 +191,6 @@ async def api_search_get(q: str, top_k: int = 5):
 
 
 if __name__ == "__main__":
-<<<<<<< HEAD
     import uvicorn
     port = int(os.getenv("PORT", 7860))
     uvicorn.run("app:app", host="0.0.0.0", port=port)
-=======
-    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 7860)))
->>>>>>> 0943f9e87d1a11ae58991fa9f4de3256b32a8edb
