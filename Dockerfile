@@ -30,6 +30,5 @@ COPY . .
 EXPOSE 7860
 
 # Run the FastAPI app using uvicorn
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]
-#CMD ["uvicorn", "app:app", "--port", "7860"]
+MD ["bash", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-7860}"]
 
