@@ -26,7 +26,7 @@ app = FastAPI(
     description='API for finding similar news articles',
     version='1.0.3'
 )
-app.mount('/static', StaticFiles(directory='static'), name='static')
+
 
 # Request model
 class SearchQuery(BaseModel):
@@ -88,7 +88,6 @@ async def root():
     html = ('<html>' + head +
             '<body>'
             '<div class="hero">'
-            '<img src="/static/free-old-newspaper-vector.jpg" alt="News Background"/>'
             '<div class="content">'
             '<h1 class="display-3">News Similarity Explorer</h1>'
             '<p class="lead">Instantly find related news articles and explore insights!</p>'
