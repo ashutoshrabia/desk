@@ -17,11 +17,6 @@ RUN pip install --upgrade pip \
 COPY news.index meta.json Articles.csv static/ ./static/ app.py ./
 
 EXPOSE 7860
-<<<<<<< HEAD
-CMD ["bash", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-7860}"]
-=======
 
-# Run the FastAPI app using uvicorn
 CMD ["bash", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-7860}"]
 
->>>>>>> 0943f9e87d1a11ae58991fa9f4de3256b32a8edb
