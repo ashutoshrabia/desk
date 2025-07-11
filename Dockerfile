@@ -1,34 +1,27 @@
-# Use the official lightweight Python image.
 FROM python:3.10-slim
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    HF_HOME=/app/cache
 
-# Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    git \
-    wget \
+RUN apt-get update && apt-get install -y build-essential git wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
 COPY requirements.txt .
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt
 
-# Install Python dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt \ 
-     && pip install huggingface_hub[hf_xet]
+# Copy your prebuilt index + metadata + app
+COPY news.index meta.json Articles.csv static/ ./static/ app.py ./
 
-
-# Copy app files
-COPY . .
-
-# Expose port for the app
 EXPOSE 7860
+<<<<<<< HEAD
+CMD ["bash", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-7860}"]
+=======
 
 # Run the FastAPI app using uvicorn
 CMD ["bash", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-7860}"]
 
+>>>>>>> 0943f9e87d1a11ae58991fa9f4de3256b32a8edb
